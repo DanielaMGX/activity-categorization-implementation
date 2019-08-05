@@ -1,9 +1,9 @@
 import json
 import sys
-from Author import Author
-from Institution import Institution
+from Model.Author import Author
+from Model.Institution import Institution
 
-with open("university_of_antioquia.json", encoding="utf-8") as dataUdeA:
+with open("DataBase/university_of_antioquia.json", encoding="utf-8") as dataUdeA:
     articles = json.loads(dataUdeA.read())
 
 """en un principio lo que hace es extraer la información del JSON, crear y actulizar los atributos de los objetos
@@ -15,9 +15,14 @@ fields_of_study = []
 authors_existence = []
 institutions_existence = []
 
-"""For que recorre articles, siendo articles una lista de los articulos que están en el JSON"""
 print("Cargando datos ...")
+
+
+"""For que recorre articles, siendo articles una lista de los articulos que están en el JSON"""
+
 for i in articles:
+
+
     """Debido a que en el JSON los autores vienen dados por un solo string y lo único que diferencia
      un autor de otro es un ; utilizamos split() que nos genera una lista con los autores ya separados,
       lo mismo hacemos para instituciones y temas"""
