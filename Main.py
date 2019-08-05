@@ -1,7 +1,7 @@
 import json
+import sys
 from Author import Author
 from Institution import Institution
-
 
 with open("university_of_antioquia.json", encoding="utf-8") as dataUdeA:
     articles = json.loads(dataUdeA.read())
@@ -16,7 +16,7 @@ authors_existence = []
 institutions_existence = []
 
 """For que recorre articles, siendo articles una lista de los articulos que están en el JSON"""
-
+print("Cargando datos ...")
 for i in articles:
     """Debido a que en el JSON los autores vienen dados por un solo string y lo único que diferencia
      un autor de otro es un ; utilizamos split() que nos genera una lista con los autores ya separados,
@@ -71,6 +71,9 @@ for i in articles:
         if (not field == "") and (field not in fields_of_study):
             fields_of_study += [field]
 
+"""institution_search le permite al usuario digitar una insitución para buscarla, despliega una lista de 
+posibles instituciones y al elegir una muestra la información de la misma"""
+
 
 def institution_search():
     search = ""
@@ -78,9 +81,20 @@ def institution_search():
     while search == "":
         search = input('Introduzca Institución a Buscar: ')
     search = search.lower()
+
     for institution in institutions:
         if institution.institution.lower().__contains__(search):
             found_institutions += [institution]
+
+    while not found_institutions:
+        search = input('No se ha encontrado ninguna institución \n \
+         si desea salir ingrese 0 \n \
+         Introduzca Institución a Buscar: ')
+        if search == "0":
+            sys.exit()
+        for institution in institutions:
+            if institution.institution.lower().__contains__(search):
+                found_institutions += [institution]
 
     for pos in range(len(found_institutions)):
         print(pos, "- ", found_institutions[pos].institution)
@@ -94,8 +108,11 @@ def institution_search():
             if int(option) < 0 or int(option) >= len(found_institutions):
                 option = ""
                 print("Opción Invalida")
+                print("si desea salir ingrese ", len(found_institutions))
+
         except:
             print("Opción Invalida")
+            print("si desea salir ingrese ", len(found_institutions))
             option = ""
 
     print()
@@ -103,6 +120,10 @@ def institution_search():
     print("Autores: ", found_institutions[option].author)
     print("Temas: ", found_institutions[option].fields)
     print("Articulos: ", found_institutions[option].articles)
+
+
+"""field_search le permite al usuario digitar un tema para buscarlo, despliega una lista de 
+posibles temas y al elegir una muestra las instituciones asociadas al tema"""
 
 
 def field_search():
@@ -114,6 +135,16 @@ def field_search():
     for field in fields_of_study:
         if field.lower().__contains__(search):
             found_fields += [field]
+
+    while not found_fields:
+        search = input('No se ha encontrado ningún tema \n \
+         si desea salir ingrese 0 \n \
+         Introduzca tema a Buscar: ')
+        if search == "0":
+            sys.exit()
+        for field in fields_of_study:
+            if field.lower().__contains__(search):
+                found_fields += [field]
 
     for pos in range(len(found_fields)):
         print(pos, "- ", found_fields[pos])
@@ -139,7 +170,36 @@ def field_search():
 
     print()
     print("Instituciones con relación al Tema: ")
-    for institution in found_institutions:
-        print(institution.institution)
+    if found_institutions:
+        print("No existen instituciones asociadas con el tema", option)
+    else:
+        for institution in found_institutions:
+            print(institution.institution)
 
-field_search()
+
+"""menu despliega un menu en donde el usuario podrá escoger que desea hacer """
+
+
+def menu():
+    nombre = ""
+    while nombre == "":
+        nombre = input("Ingrese el número de la busqueda que desea hacer: \n \
+                1- Busqueda por insituciones \n \
+                2- Busqueda por temas. \n \
+                3- para salir \n")
+        try:
+            nombre = int(nombre)
+            if int(nombre) < 1 or int(nombre) >= 4:
+                nombre = ""
+                print("Opción Invalida")
+        except:
+            print("Opción Invalida")
+            nombre = ""
+
+    if nombre == 1:
+        institution_search()
+    elif nombre == 2:
+        field_search()
+
+
+menu()
