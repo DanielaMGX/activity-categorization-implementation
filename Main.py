@@ -170,11 +170,10 @@ def field_search():
 
     print()
     print("Instituciones con relación al Tema: ")
-    if found_institutions:
-        print("No existen instituciones asociadas con el tema", option)
-    else:
-        for institution in found_institutions:
-            print(institution.institution)
+    for institution in found_institutions:
+        print(institution.institution)
+    if len(found_institutions) == 0:
+        print("no hay instituciones relacionadas con el tema ")
 
 
 """menu despliega un menu en donde el usuario podrá escoger que desea hacer """
@@ -189,7 +188,7 @@ def menu():
                 3- para salir \n")
         try:
             nombre = int(nombre)
-            if int(nombre) < 1 or int(nombre) >= 4:
+            if int(nombre) < 0 or int(nombre) >= 4:
                 nombre = ""
                 print("Opción Invalida")
         except:
